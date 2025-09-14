@@ -1,6 +1,6 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { supabase } from "./lib/supabaseClient";
+import { supabase } from "./lib/supabaseclient.js";
 
 import Navbar from "./components/Navbar";  // ✅ Navbar থাকবে
 import Home from "./pages/Home";
