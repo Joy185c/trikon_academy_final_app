@@ -3,43 +3,43 @@ import { useEffect } from "react";
 import { supabase } from "./lib/supabaseclient.js";
 
 import Navbar from "./components/navbar.jsx";  // ✅ Navbar থাকবে
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Dashboard from "./pages/Dashboard";
-import Courses from "./pages/Courses";
-import Profile from "./pages/Profile";
-import MyCourses from "./pages/MyCourses";
-import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/home.jsx";
+import Login from "./pages/login.jsx";
+import Signup from "./pages/SignUp.jsx";
+import Dashboard from "./pages/dashboard.jsx";
+import Courses from "./pages/courses.jsx";
+import Profile from "./pages/profile.jsx";
+import MyCourses from "./pages/mycourses.jsx";
+import ProtectedRoute from "./components/protectedroute.jsx";
 
 // 🔥 Question Bank System
-import QuestionBank from "./pages/QuestionBank";
-import QuestionPapers from "./pages/QuestionPapers";
+import QuestionBank from "./pages/QuestionBank.jsx";
+import QuestionPapers from "./pages/QuestionPapers.jsx";
 import Exam from "./pages/Exam";
 
 // 🆕 Exam History
-import ExamHistoryPage from "./pages/student/ExamHistoryPage";
+import ExamHistoryPage from "./pages/student/ExamHistoryPage.jsx";
 
 // 🆕 Exam Submit Page
-import ExamSubmitPage from "./pages/student/ExamSubmitPage";
+import ExamSubmitPage from "./pages/student/ExamSubmitPage.jsx";
 
 // 🆕 Enrolled Course Details
-import CourseDetails from "./pages/CourseDetails";
+import CourseDetails from "./pages/CourseDetails.jsx";
 
 // 🆕 Course Exam Taking Page
-import ExamTakingPage from "./pages/student/ExamTakingPage";
+import ExamTakingPage from "./pages/student/ExamTakingPage.jsx";
 
 // 🆕 Admin Panel
-import AdminRoute from "./components/AdminRoute";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminLogin from "./pages/AdminLogin";
-import UserManagement from "./pages/admin/UserManagement";
-import CourseManagement from "./pages/admin/CourseManagement";
-import AdminExams from "./pages/admin/AdminExams";
-import AdminQuestionBank from "./pages/admin/AdminQuestionBank";
-import ManageCourseQuestions from "./pages/admin/ManageCourseQuestions";
-import ManageExams from "./pages/admin/ManageExams";
-import ManageExamQuestions from "./pages/admin/ManageExamQuestions";
+import AdminRoute from "./components/AdminRoute.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+import AdminLogin from "./pages/AdminLogin.jsx";
+import UserManagement from "./pages/admin/UserManagement.jsx";
+import CourseManagement from "./pages/admin/CourseManagement.jsx";
+import AdminExams from "./pages/admin/adminexams.jsx";
+import AdminQuestionBank from "./pages/admin/AdminQuestionbank.jsx";
+import ManageCourseQuestions from "./pages/admin/ManageCourseQuestions.";
+import ManageExams from "./pages/admin/ManageExams.";
+import ManageExamQuestions from "./pages/admin/ManageExamQuestions.jsx";
 
 const App = () => {
   const navigate = useNavigate();
