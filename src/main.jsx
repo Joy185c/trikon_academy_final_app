@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { AuthProvider } from "./context/AuthContext"; // ✔️ ঠিক আছে
+import { AuthProvider } from "./context/AuthContext.jsx"; // ✅ extension যোগ করা হলো
 import "./index.css";
 
 // KaTeX CSS for math formulas
