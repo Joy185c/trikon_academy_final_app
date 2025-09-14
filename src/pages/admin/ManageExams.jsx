@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseclient.js";
 
 function ManageExams() {
   const [exams, setExams] = useState([]);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseclient.js";
 
 function UserManagement() {
   const [users, setUsers] = useState([]);

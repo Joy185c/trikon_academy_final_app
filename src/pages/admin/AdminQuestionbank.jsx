@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseclient.js";
 import { BlockMath } from "react-katex"; // ✅ Import KaTeX
 import "katex/dist/katex.min.css"; // ensure css loaded
 

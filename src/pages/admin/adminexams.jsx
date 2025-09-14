@@ -1,7 +1,7 @@
 // src/pages/admin/AdminExams.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseclient.js";
 
 function AdminExams() {
   const [papers, setPapers] = useState([]);

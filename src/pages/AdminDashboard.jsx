@@ -1,7 +1,7 @@
 // src/pages/AdminDashboard.jsx
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../lib/supabaseclient.js";
 
 function AdminDashboard() {
   const [totalStudents, setTotalStudents] = useState(0);

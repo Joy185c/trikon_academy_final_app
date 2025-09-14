@@ -1,6 +1,6 @@
 // src/pages/PracticeQuestions.jsx
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../lib/supabaseclient.js";
 
 function PracticeQuestions() {
   const [universities, setUniversities] = useState([]);

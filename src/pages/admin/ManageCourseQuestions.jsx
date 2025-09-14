@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseclient.js";
 import { BlockMath } from "react-katex"; // ✅ KaTeX support
 import "katex/dist/katex.min.css";
 

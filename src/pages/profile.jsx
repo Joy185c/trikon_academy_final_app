@@ -1,5 +1,5 @@
 import { useAuth } from "../context/AuthContext";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../lib/supabaseclient.js";
 import { useState } from "react";
 
 function Profile() {

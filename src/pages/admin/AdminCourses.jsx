@@ -1,6 +1,6 @@
 // src/pages/admin/AdminCourses.jsx
 import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseclient.js";
 
 function AdminCourses() {
   const [courses, setCourses] = useState([]);

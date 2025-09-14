@@ -1,7 +1,7 @@
 // src/components/AdminRoute.jsx
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../lib/supabaseclient.js";
 
 function AdminRoute({ children }) {
   const [user, setUser] = useState(null);
