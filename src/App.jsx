@@ -2,7 +2,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { supabase } from "./lib/supabaseclient.js";
 
-import Navbar from "./components/Navbar";  // ✅ Navbar থাকবে
+import Navbar from "./components/navbar.jsx";  // ✅ Navbar থাকবে
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
