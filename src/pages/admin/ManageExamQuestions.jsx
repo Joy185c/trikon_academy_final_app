@@ -1,7 +1,7 @@
 // src/pages/admin/ManageExamQuestions.jsx
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseclient.js";
 
 function ManageExamQuestions() {
   const { examId } = useParams();
