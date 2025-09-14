@@ -38,7 +38,7 @@ import CourseManagement from "./pages/admin/CourseManagement.jsx";
 import AdminExams from "./pages/admin/adminexams.jsx";
 import AdminQuestionBank from "./pages/admin/AdminQuestionbank.jsx";
 import ManageCourseQuestions from "./pages/admin/ManageCourseQuestions.jsx";
-import ManageExams from "./pages/admin/ManageExams.";
+import ManageExams from "./pages/admin/ManageExams.jsx";
 import ManageExamQuestions from "./pages/admin/ManageExamQuestions.jsx";
 
 const App = () => {
