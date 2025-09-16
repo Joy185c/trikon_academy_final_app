@@ -1,20 +1,11 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseclient";
-import { Dialog } from "@headlessui/react";
 
 function CourseCard({ course, isEnrolled, isPending, onEnroll }) {
   const [couponInput, setCouponInput] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(0);
   const [message, setMessage] = useState(null);
   const [enrolledCount, setEnrolledCount] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // payment form fields
-  const [fullName, setFullName] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [hscBatch, setHscBatch] = useState("");
-  const [bkashNumber, setBkashNumber] = useState("");
-  const [trxId, setTrxId] = useState("");
 
   // 🔹 Fetch live enrolled count
   useEffect(() => {
@@ -46,26 +37,12 @@ function CourseCard({ course, isEnrolled, isPending, onEnroll }) {
     }
   };
 
-  // confirm enroll
+  // confirm enroll (direct call without form)
   const handleEnrollConfirm = async () => {
     const finalPrice = Math.max(0, course.price - appliedDiscount);
-    await onEnroll(course, finalPrice, {
-      fullName,
-      contactNumber,
-      hscBatch,
-      bkashNumber,
-      trxId,
-    });
+    await onEnroll(course, finalPrice, {}); // empty form data since not needed
     setEnrolledCount((prev) => prev + 1);
-    setIsModalOpen(false);
-
-    // reset form
-    setFullName("");
-    setContactNumber("");
-    setHscBatch("");
-    setBkashNumber("");
-    setTrxId("");
-  };
+  }
 
   const finalPrice = Math.max(0, course.price - appliedDiscount);
 
@@ -177,7 +154,7 @@ function CourseCard({ course, isEnrolled, isPending, onEnroll }) {
           </button>
         ) : (
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleEnrollConfirm}
             className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 
                        to-purple-600 text-white px-4 py-2 rounded-xl font-bold 
                        shadow-md hover:from-blue-700 hover:to-purple-700 
@@ -187,91 +164,8 @@ function CourseCard({ course, isEnrolled, isPending, onEnroll }) {
           </button>
         )}
       </div>
-
-      {/* 🔹 Modal */}
-      <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)} className="relative z-50">
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="bg-white/90 backdrop-blur-md rounded-2xl p-6 max-w-md mx-auto shadow-xl border border-white/30">
-            {finalPrice === 0 ? (
-              <>
-                <Dialog.Title className="text-xl font-bold text-center text-blue-600">
-                  🎓 ফ্রি এনরোলমেন্ট
-                </Dialog.Title>
-                <Dialog.Description className="mt-3 text-center text-gray-700">
-                  এই কোর্সে এনরোল করা সম্পূর্ণ{" "}
-                  <span className="font-bold text-green-600">ফ্রি</span>!
-                </Dialog.Description>
-              </>
-            ) : (
-              <>
-                <Dialog.Title className="text-xl font-bold text-center text-purple-600">
-                  💳 Payment Required
-                </Dialog.Title>
-                <Dialog.Description className="mt-3 text-center text-gray-700">
-                  Please complete the payment to enroll in{" "}
-                  <span className="font-bold">{course.title}</span>.
-                </Dialog.Description>
-
-                <div className="mt-4 space-y-2">
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="w-full border px-3 py-2 rounded-lg"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Contact Number"
-                    value={contactNumber}
-                    onChange={(e) => setContactNumber(e.target.value)}
-                    className="w-full border px-3 py-2 rounded-lg"
-                  />
-                  <input
-                    type="text"
-                    placeholder="HSC Batch"
-                    value={hscBatch}
-                    onChange={(e) => setHscBatch(e.target.value)}
-                    className="w-full border px-3 py-2 rounded-lg"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Your bKash Number"
-                    value={bkashNumber}
-                    onChange={(e) => setBkashNumber(e.target.value)}
-                    className="w-full border px-3 py-2 rounded-lg"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Transaction ID"
-                    value={trxId}
-                    onChange={(e) => setTrxId(e.target.value)}
-                    className="w-full border px-3 py-2 rounded-lg"
-                  />
-                </div>
-              </>
-            )}
-
-            <div className="mt-6 flex justify-center gap-3">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
-              >
-                ❌ Cancel
-              </button>
-              <button
-                onClick={handleEnrollConfirm}
-                className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
-              >
-                ✅ Confirm
-              </button>
-            </div>
-          </Dialog.Panel>
-        </div>
-      </Dialog>
     </div>
-  );
+  )
 }
 
 export default CourseCard;

@@ -27,36 +27,55 @@ function AdminPayments() {
     fetchRequests();
   }, []);
 
-  // approve request
+  // ✅ approve request
   const approveRequest = async (req) => {
-    const { error: enrollError } = await supabase.from("enrollments").insert([
-      {
-        student_id: req.student_id,
-        course_id: req.course_id,
-        paid_amount: req.amount,
-      },
-    ]);
+    try {
+      // check if already enrolled
+      const { data: existing, error: checkError } = await supabase
+        .from("enrollments")
+        .select("id")
+        .eq("student_id", req.student_id)
+        .eq("course_id", req.course_id)
+        .maybeSingle();
 
-    if (enrollError) {
+      if (checkError) throw checkError;
+
+      if (!existing) {
+        // insert new enrollment
+        const { error: enrollError } = await supabase
+          .from("enrollments")
+          .insert([
+            {
+              student_id: req.student_id,
+              course_id: req.course_id,
+              paid_amount: req.amount,
+            },
+          ]);
+
+        if (enrollError) throw enrollError;
+      }
+
+      // update payment request status
+      const { error: updateError } = await supabase
+        .from("payment_requests")
+        .update({ status: "Approved" })
+        .eq("id", req.id);
+
+      if (updateError) throw updateError;
+
+      setModal({
+        show: true,
+        type: "success",
+        message: "✅ Approved successfully!",
+      });
+      fetchRequests();
+    } catch (err) {
       setModal({
         show: true,
         type: "error",
-        message: "❌ Enrollment failed: " + enrollError.message,
+        message: "❌ Failed: " + err.message,
       });
-      return;
     }
-
-    await supabase
-      .from("payment_requests")
-      .update({ status: "Approved" })
-      .eq("id", req.id);
-
-    setModal({
-      show: true,
-      type: "success",
-      message: "✅ Approved successfully!",
-    });
-    fetchRequests();
   };
 
   // reject request
@@ -112,6 +131,7 @@ function AdminPayments() {
                     ৳{req.amount}
                   </p>
                 </div>
+
                 <div className="bg-pink-50 border border-pink-200 p-3 rounded-lg">
                   <span className="text-xs uppercase text-gray-500 font-semibold">
                     bKash Number
@@ -120,6 +140,16 @@ function AdminPayments() {
                     {req.bkash_number}
                   </p>
                 </div>
+
+                <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+                  <span className="text-xs uppercase text-gray-500 font-semibold">
+                    Contact Number
+                  </span>
+                  <p className="text-lg font-bold text-blue-700">
+                    {req.contact_number}
+                  </p>
+                </div>
+
                 <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg sm:col-span-2">
                   <span className="text-xs uppercase text-gray-500 font-semibold">
                     Transaction ID
