@@ -6,7 +6,7 @@ function AdminCourses() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ New course form state
+  // ✅ Full form state with new fields
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -15,6 +15,10 @@ function AdminCourses() {
     discount_amount: "",
     duration: "",
     thumbnail: "",
+    overview_link: "",
+    overview_thumbnail: "",
+    instructor_name: "",
+    instructor_info: "",
   });
 
   useEffect(() => {
@@ -48,6 +52,10 @@ function AdminCourses() {
         discount_amount: "",
         duration: "",
         thumbnail: "",
+        overview_link: "",
+        overview_thumbnail: "",
+        instructor_name: "",
+        instructor_info: "",
       });
       fetchCourses();
       alert("✅ Course added successfully!");
@@ -76,8 +84,7 @@ function AdminCourses() {
 
   // ✅ Live final price calculation
   const finalPrice =
-    (parseFloat(form.price) || 0) -
-    (parseFloat(form.discount_amount) || 0);
+    (parseFloat(form.price) || 0) - (parseFloat(form.discount_amount) || 0);
 
   return (
     <div className="p-8">
@@ -132,6 +139,39 @@ function AdminCourses() {
           onChange={(e) => setForm({ ...form, thumbnail: e.target.value })}
           className="border px-3 py-2 rounded"
         />
+        <input
+          type="text"
+          placeholder="Overview Link"
+          value={form.overview_link}
+          onChange={(e) => setForm({ ...form, overview_link: e.target.value })}
+          className="border px-3 py-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Overview Thumbnail URL"
+          value={form.overview_thumbnail}
+          onChange={(e) =>
+            setForm({ ...form, overview_thumbnail: e.target.value })
+          }
+          className="border px-3 py-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Instructor Name"
+          value={form.instructor_name}
+          onChange={(e) =>
+            setForm({ ...form, instructor_name: e.target.value })
+          }
+          className="border px-3 py-2 rounded"
+        />
+        <textarea
+          placeholder="Instructor Info"
+          value={form.instructor_info}
+          onChange={(e) =>
+            setForm({ ...form, instructor_info: e.target.value })
+          }
+          className="border px-3 py-2 rounded md:col-span-2"
+        ></textarea>
         <textarea
           placeholder="Description"
           value={form.description}
@@ -147,9 +187,7 @@ function AdminCourses() {
           </p>
           <p>
             🎟️ Discount:{" "}
-            <span className="font-semibold">
-              ${form.discount_amount || 0}
-            </span>
+            <span className="font-semibold">${form.discount_amount || 0}</span>
           </p>
           <p>
             ✅ Final Price:{" "}
@@ -177,6 +215,7 @@ function AdminCourses() {
             <th className="p-3 text-left">Coupon</th>
             <th className="p-3 text-left">Discount</th>
             <th className="p-3 text-left">Duration</th>
+            <th className="p-3 text-left">Instructor</th>
             <th className="p-3 text-left">Actions</th>
           </tr>
         </thead>
@@ -208,6 +247,7 @@ function AdminCourses() {
                 {c.discount_amount ? `$${c.discount_amount}` : "-"}
               </td>
               <td className="p-3">{c.duration || "-"}</td>
+              <td className="p-3">{c.instructor_name || "-"}</td>
               <td className="p-3">
                 <button
                   onClick={() => handleDeleteCourse(c.id)}
@@ -220,7 +260,7 @@ function AdminCourses() {
           ))}
           {courses.length === 0 && (
             <tr>
-              <td colSpan="7" className="p-4 text-center text-gray-500">
+              <td colSpan="8" className="p-4 text-center text-gray-500">
                 No courses found.
               </td>
             </tr>

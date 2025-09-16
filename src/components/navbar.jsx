@@ -54,7 +54,9 @@ function Navbar() {
           { path: "/question-bank", label: "Question Bank" },
           { path: "/exam-history", label: "Exam History" },
           { path: "/profile", label: "Profile" },
-          ...(role === "admin" ? [{ path: "/admin", label: "Admin Dashboard" }] : []),
+          ...(role === "admin"
+            ? [{ path: "/admin", label: "Admin Dashboard" }]
+            : []),
         ]
       : [
           { path: "/login", label: "Login" },
@@ -63,7 +65,8 @@ function Navbar() {
   ];
 
   return (
-    <nav className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 text-white px-6 py-4 shadow-lg sticky top-0 z-50 backdrop-blur-lg">
+    <nav className="bg-gradient-to-r from-emerald-700/80 via-teal-600/80 to-green-700/80 
+      text-white px-6 py-3 shadow-lg sticky top-0 z-50 backdrop-blur-xl border-b border-white/20">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         {/* Brand */}
         <Link
@@ -73,9 +76,10 @@ function Navbar() {
           <img
             src={trikonLogo}
             alt="Trikon Logo"
-            className="h-10 w-auto drop-shadow-lg"
+            className="h-9 w-auto drop-shadow-lg"
           />
-          <span className="text-2xl font-extrabold tracking-wide drop-shadow-md group-hover:text-yellow-300 transition-colors">
+          <span className="text-xl font-extrabold tracking-wide drop-shadow-md 
+            group-hover:text-yellow-300 transition-colors">
             Trikon Academy
           </span>
         </Link>
@@ -87,11 +91,11 @@ function Navbar() {
               key={item.path}
               to={item.path}
               onClick={() => setActiveItem(item.label)}
-              className={`relative transition-all duration-300 
+              className={`relative text-sm transition-all duration-300 
                 ${
                   activeItem === item.label
-                    ? "scale-110 text-yellow-300 animate-pulse"
-                    : "hover:scale-110 hover:text-yellow-200"
+                    ? "text-yellow-300 border-b-2 border-yellow-300 pb-0.5"
+                    : "hover:text-yellow-200"
                 }
               `}
             >
@@ -102,7 +106,9 @@ function Navbar() {
           {user && (
             <button
               onClick={handleLogout}
-              className="ml-4 px-5 py-1.5 bg-gradient-to-r from-red-500 to-red-600 rounded-full shadow-md hover:scale-110 hover:shadow-lg transition-all duration-300 text-white font-semibold"
+              className="ml-4 px-4 py-1.5 bg-gradient-to-r from-red-500 to-red-600 
+              rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-all 
+              duration-300 text-white font-semibold text-sm"
             >
               Logout
             </button>
@@ -122,7 +128,9 @@ function Navbar() {
 
       {/* Mobile Dropdown */}
       {menuOpen && (
-        <div className="md:hidden mt-3 space-y-2 bg-white/10 backdrop-blur-lg rounded-lg p-4 shadow-lg">
+        <div className="md:hidden mt-3 space-y-2 
+          bg-gradient-to-br from-emerald-700/95 via-teal-600/95 to-green-700/95 
+          backdrop-blur-xl rounded-lg p-3 shadow-lg w-full animate-slideDown">
           {navItems.map((item) => (
             <Link
               key={item.path}
@@ -131,11 +139,13 @@ function Navbar() {
                 setActiveItem(item.label);
                 setMenuOpen(false);
               }}
-              className={`block transition-all duration-300 ${
-                activeItem === item.label
-                  ? "scale-105 text-yellow-300 animate-pulse"
-                  : "hover:scale-105 hover:text-yellow-200"
-              }`}
+              className={`block px-3 py-2 rounded-lg text-center font-medium text-sm
+                transition-all duration-300 
+                ${
+                  activeItem === item.label
+                    ? "bg-white/30 text-yellow-300 scale-105 shadow-md"
+                    : "bg-white/10 hover:bg-white/20"
+                }`}
             >
               {item.label}
             </Link>
@@ -144,13 +154,26 @@ function Navbar() {
           {user && (
             <button
               onClick={handleLogout}
-              className="w-full bg-gradient-to-r from-red-500 to-red-600 px-4 py-2 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300 text-white font-semibold"
+              className="w-full px-3 py-2 rounded-lg text-center font-semibold text-sm
+              bg-gradient-to-r from-red-500 to-red-600 text-white 
+              hover:scale-105 hover:shadow-lg transition-all duration-300"
             >
               Logout
             </button>
           )}
         </div>
       )}
+
+      {/* Slide Animation */}
+      <style>{`
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-15px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out;
+        }
+      `}</style>
     </nav>
   );
 }

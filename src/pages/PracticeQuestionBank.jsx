@@ -123,7 +123,7 @@ function PracticeQuestions() {
             onClick={() => setMode("read")}
             className="bg-gray-600 text-white px-5 py-2 rounded-lg shadow hover:bg-gray-700 transition"
           >
-            📖 Read Mode
+            📖 Read mode
           </button>
           <button
             onClick={() => setMode("exam")}

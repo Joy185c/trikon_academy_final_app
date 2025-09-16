@@ -42,7 +42,7 @@ function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-rose-50">
       {/* 🔹 Header */}
-      <header className="w-full flex items-center justify-center py-6 shadow-lg bg-gradient-to-r from-teal-100/60 via-emerald-100/50 to-rose-100/50 backdrop-blur-lg">
+      <header className="w-full flex items-center justify-center py-6 shadow-lg bg-gradient-to-r from-teal-100/70 via-emerald-100/50 to-rose-100/50 backdrop-blur-lg">
         <h1
           className="
             font-extrabold 
@@ -50,28 +50,28 @@ function AdminDashboard() {
             bg-gradient-to-r from-teal-600 via-emerald-500 to-rose-500
             drop-shadow-md
             animate-pulse
-            text-lg sm:text-2xl md:text-3xl lg:text-4xl
+            text-xl sm:text-3xl md:text-4xl lg:text-5xl
             text-center
             px-4
           "
         >
-          Trikon Academy - Admin Dashboard
+          🌟 Trikon Academy - Admin Dashboard
         </h1>
       </header>
 
       {/* 🔹 Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-        <div className="bg-white/40 backdrop-blur-lg border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-2xl transition transform duration-300">
+        <div className="bg-white/40 backdrop-blur-lg border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-2xl transition duration-300">
           <h2 className="text-lg font-semibold text-teal-600">👩‍🎓 Total Students</h2>
           <p className="text-4xl font-extrabold text-teal-800">{totalStudents}</p>
         </div>
 
-        <div className="bg-white/40 backdrop-blur-lg border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-2xl transition transform duration-300">
+        <div className="bg-white/40 backdrop-blur-lg border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-2xl transition duration-300">
           <h2 className="text-lg font-semibold text-emerald-600">📚 Total Courses</h2>
           <p className="text-4xl font-extrabold text-emerald-800">{totalCourses}</p>
         </div>
 
-        <div className="bg-white/40 backdrop-blur-lg border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-2xl transition transform duration-300">
+        <div className="bg-white/40 backdrop-blur-lg border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 hover:shadow-2xl transition duration-300">
           <h2 className="text-lg font-semibold text-rose-600">📝 Total Exams</h2>
           <p className="text-4xl font-extrabold text-rose-800">{totalExams}</p>
         </div>
@@ -83,7 +83,7 @@ function AdminDashboard() {
           ⚡ Manage Platform
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           <Link
             to="/admin/users"
             className="p-6 bg-gradient-to-r from-teal-100 to-emerald-100 rounded-2xl shadow-md hover:shadow-xl transform hover:-translate-y-1 transition"
@@ -123,6 +123,28 @@ function AdminDashboard() {
             </h3>
             <p className="text-gray-700 text-sm">
               Add, edit, and delete university questions.
+            </p>
+          </Link>
+
+          {/* ✅ Payment Settings */}
+          <Link
+            to="/admin/bkash-settings"
+            className="p-6 bg-gradient-to-r from-pink-100 to-rose-100 rounded-2xl shadow-md hover:shadow-xl transform hover:-translate-y-1 transition"
+          >
+            <h3 className="font-bold text-pink-700 mb-2">⚙️ Payment Settings</h3>
+            <p className="text-gray-700 text-sm">
+              Update your bKash number for course payments.
+            </p>
+          </Link>
+
+          {/* ✅ Enrollment Requests */}
+          <Link
+            to="/admin/payments"
+            className="p-6 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl shadow-md hover:shadow-xl transform hover:-translate-y-1 transition"
+          >
+            <h3 className="font-bold text-yellow-700 mb-2">💳 Enrollment Requests</h3>
+            <p className="text-gray-700 text-sm">
+              Approve or reject student payment requests.
             </p>
           </Link>
         </div>

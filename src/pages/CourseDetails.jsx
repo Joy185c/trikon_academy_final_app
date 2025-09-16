@@ -153,7 +153,7 @@ function CourseDetails() {
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-3 justify-center mb-8">
-        {["overview", "lectures", "assignments", "exams", "leaderboard"].map(
+        {["overview", "lectures", "assignments", "exams", "leaderboard", "instructor"].map(
           (tab) => (
             <button
               key={tab}
@@ -170,90 +170,101 @@ function CourseDetails() {
         )}
       </div>
 
-      {/* Overview */}
+      {/* ✅ Overview */}
       {activeTab === "overview" && (
-        <div className="bg-white p-6 shadow-xl rounded-2xl border border-slate-100">
-          <h2 className="text-xl font-bold mb-4 text-indigo-600 flex items-center gap-2">
-            📖 Overview
-          </h2>
-          <p>
-            <strong>Instructor:</strong> {course.instructor || "Naushin Jannat"}
+        <div className="bg-white p-6 shadow-xl rounded-2xl border border-slate-100 text-center space-y-4">
+          <h2 className="text-2xl font-bold text-green-600">🎉 অভিনন্দন!</h2>
+          <p className="text-slate-700">
+            আপনি সফলভাবে এই কোর্সে যুক্ত হয়েছেন। মনোযোগ দিয়ে পড়াশোনা করুন।
           </p>
-          <p>
-            <strong>Duration:</strong> {course.duration || "N/A"}
+          <p className="text-red-500 text-sm font-semibold">
+            ⚠️ সতর্কতা: এই কোর্সের ভিডিও, কন্টেন্ট বা একাউন্ট শেয়ার করা আইনত দণ্ডনীয় অপরাধ। 
+            সাইবার ক্রাইম করলে শাস্তি ভোগ করতে হবে।
           </p>
-          <p className="mt-3 text-slate-600">
-            You are enrolled in this course. Complete lectures, assignments and
-            exams to track your progress.
-          </p>
+          {course.overview_thumbnail && course.overview_link && (
+            <a
+              href={course.overview_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-4"
+            >
+              <img
+                src={course.overview_thumbnail}
+                alt="Course Overview"
+                className="rounded-xl shadow-lg hover:scale-105 transition"
+              />
+            </a>
+          )}
         </div>
       )}
 
-      {/* Lectures */}
+      {/* ✅ Lectures */}
       {activeTab === "lectures" && (
-        <div className="bg-white p-6 shadow-xl rounded-2xl border border-slate-100">
-          <h2 className="text-xl font-bold mb-4 text-indigo-600 flex items-center gap-2">
-            🎥 Lectures
-          </h2>
-          {lectures.length === 0 ? (
-            <p className="text-slate-500">No lectures available.</p>
-          ) : (
-            <ul className="space-y-3">
-              {lectures.map((lec) => (
-                <li
-                  key={lec.id}
-                  className="flex justify-between items-center p-4 border rounded-lg hover:shadow-md transition-all"
-                >
-                  <span className="font-medium">{lec.title}</span>
-                  <span
-                    className={`px-3 py-1 text-sm rounded-full ${
-                      lec.completed
-                        ? "bg-emerald-100 text-emerald-700"
-                        : "bg-slate-200 text-slate-700"
-                    }`}
-                  >
-                    {lec.completed ? "✅ Completed" : "⏳ Pending"}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+        <div className="grid md:grid-cols-2 gap-6">
+          {lectures.map((lec) => (
+            <div
+              key={lec.id}
+              className="bg-white rounded-2xl shadow-lg overflow-hidden border"
+            >
+              <a href={lec.video_link} target="_blank" rel="noopener noreferrer">
+                <img
+                  src={lec.thumbnail}
+                  alt={lec.title}
+                  className="w-full h-48 object-cover hover:scale-105 transition"
+                />
+              </a>
+              <div className="p-4">
+                <h3 className="font-bold text-lg text-slate-700">
+                  {lec.title}
+                </h3>
+                <p className="text-sm text-slate-500">{lec.description}</p>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* Assignments */}
+      {/* ✅ Assignments */}
       {activeTab === "assignments" && (
-        <div className="bg-white p-6 shadow-xl rounded-2xl border border-slate-100">
-          <h2 className="text-xl font-bold mb-4 text-indigo-600 flex items-center gap-2">
-            📝 Assignments
-          </h2>
-          {assignments.length === 0 ? (
-            <p className="text-slate-500">No assignments given yet.</p>
-          ) : (
-            <ul className="space-y-3">
-              {assignments.map((a) => (
-                <li
-                  key={a.id}
-                  className="flex justify-between items-center p-4 border rounded-lg hover:shadow-md transition-all"
-                >
-                  <span>{a.title}</span>
-                  <span
-                    className={`px-3 py-1 text-sm rounded-full ${
-                      a.status === "graded"
-                        ? "bg-emerald-100 text-emerald-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {a.status || "Pending"}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+        <div className="grid md:grid-cols-2 gap-6">
+          {assignments.map((a) => (
+            <div
+              key={a.id}
+              className="bg-white rounded-2xl shadow-lg p-6 border flex flex-col"
+            >
+              <h3 className="font-bold text-lg mb-3 text-indigo-600">
+                📄 {a.title}
+              </h3>
+              <iframe
+                src={a.pdf_url}
+                title={a.title}
+                className="w-full h-64 border rounded-lg mb-3"
+              ></iframe>
+              <a
+                href={a.pdf_url}
+                download
+                className="px-4 py-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 text-center"
+              >
+                Download PDF
+              </a>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* Exams */}
+      {/* ✅ Instructor */}
+      {activeTab === "instructor" && (
+        <div className="bg-white p-6 shadow-xl rounded-2xl border text-center">
+          <h2 className="text-2xl font-bold text-indigo-600">👨‍🏫 Instructor</h2>
+          <p className="mt-3 text-lg font-medium text-slate-700">
+            {course.instructor_name}
+          </p>
+          <p className="text-slate-600 mt-2">{course.instructor_info}</p>
+        </div>
+      )}
+
+      {/* Exams + Leaderboard as before */}
+      {/* Exams */} 
       {activeTab === "exams" && (
         <div className="space-y-6">
           {/* Live Exams */}
@@ -336,13 +347,21 @@ function CourseDetails() {
                       key={e.id}
                       className="flex justify-between items-center p-4 border rounded-lg hover:shadow-md transition-all"
                     >
-                      <span className="font-semibold text-slate-700">
-                        {e.title}
-                      </span>
-                      <span className="text-sm text-slate-500">
-                        {new Date(e.start_time).toLocaleString()} →{" "}
-                        {new Date(e.end_time).toLocaleString()}
-                      </span>
+                      <div>
+                        <p className="font-semibold text-slate-700">
+                          {e.title}
+                        </p>
+                        <p className="text-sm text-slate-500">
+                          {new Date(e.start_time).toLocaleString()} →{" "}
+                          {new Date(e.end_time).toLocaleString()}
+                        </p>
+                      </div>
+                      <Link
+                        to={`/course-exam/${e.id}?mode=practice`}
+                        className="px-4 py-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition"
+                      >
+                        Start Practice
+                      </Link>
                     </li>
                   ))}
               </ul>

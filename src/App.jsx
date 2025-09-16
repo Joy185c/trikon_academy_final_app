@@ -41,6 +41,10 @@ import ManageCourseQuestions from "./pages/admin/ManageCourseQuestions.jsx";
 import ManageExams from "./pages/admin/ManageExams.jsx";
 import ManageExamQuestions from "./pages/admin/ManageExamQuestions.jsx";
 
+// 🆕 New Admin Pages
+import AdminBkashSettings from "./pages/admin/AdminBkashSettings.jsx";
+import AdminPayments from "./pages/admin/AdminPayments.jsx";
+
 const App = () => {
   const navigate = useNavigate();
 
@@ -173,6 +177,24 @@ const App = () => {
           element={
             <AdminRoute>
               <AdminQuestionBank />
+            </AdminRoute>
+          }
+        />
+
+        {/* 🆕 New Admin Pages */}
+        <Route
+          path="/admin/bkash-settings"
+          element={
+            <AdminRoute>
+              <AdminBkashSettings />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/payments"
+          element={
+            <AdminRoute>
+              <AdminPayments />
             </AdminRoute>
           }
         />
