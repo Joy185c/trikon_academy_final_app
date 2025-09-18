@@ -8,6 +8,18 @@ function AdminDashboard() {
   const [totalCourses, setTotalCourses] = useState(0);
   const [totalExams, setTotalExams] = useState(0);
 
+  // ✅ Live Quiz states
+  const [quizzes, setQuizzes] = useState([]);
+  const [form, setForm] = useState({
+    question: "",
+    option_a: "",
+    option_b: "",
+    option_c: "",
+    option_d: "",
+    correct_answer: "A",
+    solution: "",
+  });
+
   useEffect(() => {
     // Students
     const fetchStudents = async () => {
@@ -37,7 +49,49 @@ function AdminDashboard() {
     fetchStudents();
     fetchCourses();
     fetchExams();
+
+    // ✅ Fetch quizzes
+    fetchQuizzes();
   }, []);
+
+  // ✅ Quiz handlers
+  const fetchQuizzes = async () => {
+    const { data, error } = await supabase
+      .from("live_quiz")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (!error) setQuizzes(data || []);
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.from("live_quiz").insert([form]);
+    if (error) {
+      alert("❌ Failed to add quiz");
+    } else {
+      alert("✅ Quiz added!");
+      setForm({
+        question: "",
+        option_a: "",
+        option_b: "",
+        option_c: "",
+        option_d: "",
+        correct_answer: "A",
+        solution: "",
+      });
+      fetchQuizzes();
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this quiz?")) return;
+    const { error } = await supabase.from("live_quiz").delete().eq("id", id);
+    if (!error) fetchQuizzes();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-rose-50">
@@ -147,6 +201,121 @@ function AdminDashboard() {
               Approve or reject student payment requests.
             </p>
           </Link>
+        </div>
+      </div>
+
+      {/* 🔹 Manage Live Quiz */}
+      <div className="p-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">📝 Manage Live Quiz</h2>
+
+        {/* Quiz Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 bg-white/60 p-4 rounded-xl shadow"
+        >
+          <input
+            type="text"
+            name="question"
+            placeholder="Question"
+            value={form.question}
+            onChange={handleChange}
+            className="border p-2 rounded col-span-2"
+          />
+          <input
+            type="text"
+            name="option_a"
+            placeholder="Option A"
+            value={form.option_a}
+            onChange={handleChange}
+            className="border p-2 rounded"
+          />
+          <input
+            type="text"
+            name="option_b"
+            placeholder="Option B"
+            value={form.option_b}
+            onChange={handleChange}
+            className="border p-2 rounded"
+          />
+          <input
+            type="text"
+            name="option_c"
+            placeholder="Option C"
+            value={form.option_c}
+            onChange={handleChange}
+            className="border p-2 rounded"
+          />
+          <input
+            type="text"
+            name="option_d"
+            placeholder="Option D"
+            value={form.option_d}
+            onChange={handleChange}
+            className="border p-2 rounded"
+          />
+
+          <select
+            name="correct_answer"
+            value={form.correct_answer}
+            onChange={handleChange}
+            className="border p-2 rounded"
+          >
+            <option value="A">Correct: A</option>
+            <option value="B">Correct: B</option>
+            <option value="C">Correct: C</option>
+            <option value="D">Correct: D</option>
+          </select>
+          <input
+            type="text"
+            name="solution"
+            placeholder="Solution"
+            value={form.solution}
+            onChange={handleChange}
+            className="border p-2 rounded"
+          />
+
+          <button
+            type="submit"
+            className="bg-blue-600 text-white rounded px-4 py-2 col-span-2"
+          >
+            ➕ Add Quiz
+          </button>
+        </form>
+
+        {/* Quiz List */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border bg-white/60 rounded-xl shadow">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="border p-2">Question</th>
+                <th className="border p-2">Answer</th>
+                <th className="border p-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {quizzes.map((q) => (
+                <tr key={q.id}>
+                  <td className="border p-2">{q.question}</td>
+                  <td className="border p-2">{q.correct_answer}</td>
+                  <td className="border p-2">
+                    <button
+                      onClick={() => handleDelete(q.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {quizzes.length === 0 && (
+                <tr>
+                  <td colSpan="3" className="text-center text-gray-500 p-4">
+                    No quizzes added yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
