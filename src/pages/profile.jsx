@@ -5,12 +5,10 @@ import { useState } from "react";
 function Profile() {
   const { user, loading } = useAuth();
 
-  // Full name update
   const [editing, setEditing] = useState(false);
   const [fullName, setFullName] = useState(user?.full_name || "");
   const [saving, setSaving] = useState(false);
 
-  // Password update
   const [newPassword, setNewPassword] = useState("");
   const [updatingPassword, setUpdatingPassword] = useState(false);
 
@@ -86,19 +84,21 @@ function Profile() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 relative px-4">
-      {/* Decorative Background */}
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/blueprint.png')] opacity-10"></div>
-
-      <div className="bg-white/80 backdrop-blur-md shadow-xl rounded-xl p-6 sm:p-8 w-full max-w-md sm:max-w-lg text-center border border-white/40 relative z-10">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4">
+      {/* Profile Card */}
+      <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl 
+                      p-6 sm:p-8 w-full max-w-sm sm:max-w-md text-center">
+        
         {/* Profile Picture */}
         <div className="flex justify-center mb-4 sm:mb-6">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-md">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 
+                          flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg 
+                          border-4 border-white/20">
             {user.email.charAt(0).toUpperCase()}
           </div>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 mb-4 sm:mb-6">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-6">
           👤 My Profile
         </h1>
 
@@ -109,23 +109,25 @@ function Profile() {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none text-sm sm:text-base"
+              className="w-full px-3 py-2 border border-gray-300/40 rounded-lg 
+                         focus:ring-2 focus:ring-blue-400 outline-none 
+                         text-sm sm:text-base bg-white/70 text-gray-900"
             />
           </div>
         ) : (
-          <p className="text-sm sm:text-base mb-2">
-            <strong>Name:</strong> {fullName || "N/A"}
+          <p className="text-sm sm:text-base mb-2 text-gray-200">
+            <strong className="text-white">Name:</strong> {fullName || "N/A"}
           </p>
         )}
 
         {/* Email */}
-        <p className="text-sm sm:text-base mb-2">
-          <strong>Email:</strong> {user.email}
+        <p className="text-sm sm:text-base mb-2 text-gray-200">
+          <strong className="text-white">Email:</strong> {user.email}
         </p>
 
         {/* Role */}
-        <p className="text-sm sm:text-base mb-4">
-          <strong>Role:</strong> {user.role || "student"}
+        <p className="text-sm sm:text-base mb-4 text-gray-200">
+          <strong className="text-white">Role:</strong> {user.role || "student"}
         </p>
 
         {/* Edit Buttons */}
@@ -134,13 +136,14 @@ function Profile() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition text-sm"
+              className="bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-2 rounded-lg 
+                         hover:opacity-90 transition text-sm shadow-md"
             >
               {saving ? "⏳ Saving..." : "💾 Save"}
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition text-sm"
+              className="bg-gray-500/50 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition text-sm"
             >
               Cancel
             </button>
@@ -148,7 +151,8 @@ function Profile() {
         ) : (
           <button
             onClick={() => setEditing(true)}
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition mb-5 text-sm sm:text-base"
+            className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-5 py-2 rounded-lg 
+                       hover:opacity-90 transition mb-5 text-sm sm:text-base shadow-md"
           >
             ✏️ Edit Name
           </button>
@@ -156,7 +160,7 @@ function Profile() {
 
         {/* Update Password Section */}
         <div className="mt-4 sm:mt-6 text-left">
-          <h2 className="text-lg sm:text-xl font-semibold text-blue-700 mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-indigo-300 mb-2">
             🔒 Update Password
           </h2>
           <div className="flex flex-col gap-2 sm:gap-3">
@@ -165,12 +169,15 @@ function Profile() {
               placeholder="Enter new password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400 outline-none text-sm sm:text-base"
+              className="w-full px-3 py-2 border border-gray-300/40 rounded-lg 
+                         focus:ring-2 focus:ring-purple-400 outline-none 
+                         text-sm sm:text-base bg-white/70 text-gray-900"
             />
             <button
               onClick={handleUpdatePassword}
               disabled={updatingPassword}
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition text-sm sm:text-base"
+              className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg 
+                         hover:opacity-90 transition text-sm sm:text-base shadow-md"
             >
               {updatingPassword ? "⏳ Updating..." : "Update Password"}
             </button>
@@ -179,7 +186,7 @@ function Profile() {
 
         {/* Message */}
         {message && (
-          <p className="mt-4 text-xs sm:text-sm text-gray-800 bg-gray-100 p-2 rounded-lg">
+          <p className="mt-4 text-xs sm:text-sm text-white bg-black/40 px-3 py-2 rounded-lg shadow-inner">
             {message}
           </p>
         )}

@@ -11,6 +11,7 @@ function CourseDetails() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [activeTab, setActiveTab] = useState("overview");
   const [progress, setProgress] = useState(0);
+  const [selectedExam, setSelectedExam] = useState(null);
 
   // ✅ Fetch Course + Content
   useEffect(() => {
@@ -76,54 +77,54 @@ function CourseDetails() {
     }
   }, [lectures, assignments, exams]);
 
-  // 🏆 Leaderboard Fetch
+  // 🏆 Leaderboard Fetch (specific exam)
   useEffect(() => {
     const fetchLeaderboard = async () => {
+      if (!selectedExam) return;
+
       const { data, error } = await supabase
         .from("exam_attempts")
-        .select(`
+        .select(
+          `
+          id,
           score,
-          user_id,
-          users!inner (
+          student_id,
+          student_users (
             id,
-            name,
+            full_name,
             email
-          ),
-          exams!inner (
-            course_id
           )
-        `)
-        .eq("exams.course_id", courseId);
+        `
+        )
+        .eq("exam_id", selectedExam);
 
       if (error) {
         console.error(error);
         return;
       }
 
-      // ✅ highest score per user
+      // ✅ highest score per student
       const scoresByUser = {};
       data.forEach((row) => {
         if (
-          !scoresByUser[row.user_id] ||
-          row.score > scoresByUser[row.user_id].score
+          !scoresByUser[row.student_id] ||
+          row.score > scoresByUser[row.student_id].score
         ) {
-          scoresByUser[row.user_id] = {
-            name: row.users.name || row.users.email,
+          scoresByUser[row.student_id] = {
+            name: row.student_users?.full_name || row.student_users?.email,
             score: row.score,
           };
         }
       });
 
-      // Array বানানো + sort
       const sorted = Object.values(scoresByUser).sort(
         (a, b) => b.score - a.score
       );
-
       setLeaderboard(sorted);
     };
 
     fetchLeaderboard();
-  }, [courseId]);
+  }, [selectedExam]);
 
   if (!course) {
     return <p className="text-center mt-10">Loading course details...</p>;
@@ -178,23 +179,8 @@ function CourseDetails() {
             আপনি সফলভাবে এই কোর্সে যুক্ত হয়েছেন। মনোযোগ দিয়ে পড়াশোনা করুন।
           </p>
           <p className="text-red-500 text-sm font-semibold">
-            ⚠️ সতর্কতা: এই কোর্সের ভিডিও, কন্টেন্ট বা একাউন্ট শেয়ার করা আইনত দণ্ডনীয় অপরাধ। 
-            সাইবার ক্রাইম করলে শাস্তি ভোগ করতে হবে।
+            ⚠️ সতর্কতা: এই কোর্সের ভিডিও, কন্টেন্ট বা একাউন্ট শেয়ার করা আইনত দণ্ডনীয় অপরাধ।
           </p>
-          {course.overview_thumbnail && course.overview_link && (
-            <a
-              href={course.overview_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-4"
-            >
-              <img
-                src={course.overview_thumbnail}
-                alt="Course Overview"
-                className="rounded-xl shadow-lg hover:scale-105 transition"
-              />
-            </a>
-          )}
         </div>
       )}
 
@@ -263,47 +249,48 @@ function CourseDetails() {
         </div>
       )}
 
-      {/* Exams + Leaderboard as before */}
-      {/* Exams */} 
+      {/* ✅ Exams */}
       {activeTab === "exams" && (
         <div className="space-y-6">
           {/* Live Exams */}
-          <div className="bg-white p-6 shadow-xl rounded-2xl border border-slate-100">
+          <div className="bg-white p-6 shadow-xl rounded-2xl border">
             <h3 className="text-lg font-semibold text-red-500 mb-3">
               🔴 Live Exams
             </h3>
             {exams.filter((e) => e.status === "live").length === 0 ? (
               <p className="text-slate-500">No live exams.</p>
             ) : (
-              <ul className="space-y-3">
-                {exams
-                  .filter((e) => e.status === "live")
-                  .map((e) => (
-                    <li
-                      key={e.id}
-                      className="flex justify-between items-center p-4 border rounded-lg bg-gradient-to-r from-red-50 to-pink-50 hover:shadow-md"
+              exams
+                .filter((e) => e.status === "live")
+                .map((e) => (
+                  <div key={e.id} className="p-4 border rounded-lg mb-3">
+                    <p className="font-semibold text-red-600">{e.title}</p>
+                    <p className="text-sm text-slate-500">
+                      {new Date(e.start_time).toLocaleString()} →{" "}
+                      {new Date(e.end_time).toLocaleString()}
+                    </p>
+                    <Link
+                      to={`/course-exam/${e.id}`}
+                      className="mt-2 px-4 py-2 bg-red-500 text-white rounded-full inline-block"
                     >
-                      <div>
-                        <p className="font-semibold text-red-600">{e.title}</p>
-                        <p className="text-sm text-slate-500">
-                          {new Date(e.start_time).toLocaleString()} →{" "}
-                          {new Date(e.end_time).toLocaleString()}
-                        </p>
-                      </div>
-                      <Link
-                        to={`/course-exam/${e.id}`}
-                        className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-                      >
-                        Start Exam
-                      </Link>
-                    </li>
-                  ))}
-              </ul>
+                      Start Exam
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setActiveTab("leaderboard");
+                        setSelectedExam(e.id);
+                      }}
+                      className="mt-2 ml-3 px-4 py-2 bg-indigo-500 text-white rounded-full inline-block"
+                    >
+                      View Leaderboard
+                    </button>
+                  </div>
+                ))
             )}
           </div>
 
           {/* Upcoming Exams */}
-          <div className="bg-white p-6 shadow-xl rounded-2xl border border-slate-100">
+          <div className="bg-white p-6 shadow-xl rounded-2xl border">
             <h3 className="text-lg font-semibold text-green-600 mb-3">
               🟢 Upcoming Exams
             </h3>
@@ -316,7 +303,7 @@ function CourseDetails() {
                   .map((e) => (
                     <li
                       key={e.id}
-                      className="flex justify-between items-center p-4 border rounded-lg hover:shadow-md transition-all"
+                      className="flex justify-between items-center p-4 border rounded-lg"
                     >
                       <span className="font-semibold text-slate-700">
                         {e.title}
@@ -332,7 +319,7 @@ function CourseDetails() {
           </div>
 
           {/* Past Exams */}
-          <div className="bg-white p-6 shadow-xl rounded-2xl border border-slate-100">
+          <div className="bg-white p-6 shadow-xl rounded-2xl border">
             <h3 className="text-lg font-semibold text-purple-600 mb-3">
               🟣 Past Exams
             </h3>
@@ -345,7 +332,7 @@ function CourseDetails() {
                   .map((e) => (
                     <li
                       key={e.id}
-                      className="flex justify-between items-center p-4 border rounded-lg hover:shadow-md transition-all"
+                      className="flex justify-between items-center p-4 border rounded-lg"
                     >
                       <div>
                         <p className="font-semibold text-slate-700">
@@ -358,7 +345,7 @@ function CourseDetails() {
                       </div>
                       <Link
                         to={`/course-exam/${e.id}?mode=practice`}
-                        className="px-4 py-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition"
+                        className="px-4 py-2 bg-purple-500 text-white rounded-full hover:bg-purple-600"
                       >
                         Start Practice
                       </Link>
@@ -370,20 +357,35 @@ function CourseDetails() {
         </div>
       )}
 
-      {/* Leaderboard */}
+      {/* ✅ Leaderboard */}
       {activeTab === "leaderboard" && (
-        <div className="bg-white p-6 shadow-xl rounded-2xl border border-slate-100">
+        <div className="bg-white p-6 shadow-xl rounded-2xl border">
           <h2 className="text-xl font-bold mb-4 text-yellow-600 flex items-center gap-2">
             🏆 Leaderboard
           </h2>
+
+          {/* Exam selector */}
+          <select
+            className="border p-2 rounded mb-4"
+            value={selectedExam || ""}
+            onChange={(e) => setSelectedExam(e.target.value)}
+          >
+            <option value="">Select Exam</option>
+            {exams.map((exam) => (
+              <option key={exam.id} value={exam.id}>
+                {exam.title}
+              </option>
+            ))}
+          </select>
+
           {leaderboard.length === 0 ? (
-            <p className="text-slate-500">SOORY! No results yet.</p>
+            <p className="text-slate-500">No results yet.</p>
           ) : (
             <ol className="space-y-3">
               {leaderboard.map((user, idx) => (
                 <li
                   key={idx}
-                  className="flex justify-between items-center p-4 border rounded-lg hover:shadow-md transition-all"
+                  className="flex justify-between items-center p-4 border rounded-lg hover:shadow-md"
                 >
                   <span>
                     <strong className="text-lg text-indigo-600">
