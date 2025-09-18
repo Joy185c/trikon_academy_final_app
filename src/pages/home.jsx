@@ -3,7 +3,7 @@ import background from "../assets/background.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabaseclient";
 
-// ✅ Banner slides (main + extra 2)
+// ✅ Banner slides
 const banners = [
   {
     id: 0,
@@ -18,14 +18,14 @@ const banners = [
     image: "https://picsum.photos/1200/400?random=1",
     quoteBn: "প্রতিদিন Practice Test দিয়ে নিজেকে আরও শক্তিশালী করুন 📚",
     quoteEn: "Daily practice makes you perfect.",
-    duration: 3000,
+    duration: 4000, // ⏳ 4s
   },
   {
     id: 2,
     image: "https://picsum.photos/1200/400?random=2",
     quoteBn: "Trikon Academy – Admission Success Starts Here 🚀",
     quoteEn: "We guide you to your dream campus.",
-    duration: 3000,
+    duration: 4000, // ⏳ 4s
   },
 ];
 
@@ -72,7 +72,7 @@ function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState(null);
 
-  // ✅ Fetch all quizzes from Supabase
+  // ✅ Fetch quizzes
   const fetchQuizzes = async () => {
     const { data, error } = await supabase
       .from("live_quiz")
@@ -120,7 +120,7 @@ function Home() {
     return () => clearTimeout(timer);
   }, [selected, currentIndex, questions]);
 
-  // ✅ Banner auto slide with custom durations
+  // ✅ Banner auto slide
   useEffect(() => {
     const currentBanner = banners[active];
     const duration =
@@ -151,7 +151,7 @@ function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* 🔥 Hero Banner */}
-      <div className="relative w-[92%] md:w-[85%] mx-auto h-[180px] md:h-[300px] mt-4 rounded-2xl overflow-hidden shadow-2xl">
+      <div className="relative w-[94%] sm:w-[90%] md:w-[85%] mx-auto h-[180px] sm:h-[220px] md:h-[300px] mt-4 rounded-2xl overflow-hidden shadow-2xl">
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
@@ -161,24 +161,21 @@ function Home() {
             transition={{ duration: 1 }}
             className="absolute inset-0"
           >
-            {/* Background */}
             <div
               className="absolute inset-0 bg-cover bg-center scale-105"
               style={{ backgroundImage: `url(${banners[active].image})` }}
             ></div>
-
-            {/* Glossy Overlay */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] shadow-inner"></div>
 
             {/* Content */}
-            <div className="relative z-10 h-full flex flex-col justify-center items-center px-6 text-center text-white">
-              <h2 className="text-sm md:text-xl font-light mb-1 tracking-wide drop-shadow-lg">
+            <div className="relative z-10 h-full flex flex-col justify-center items-center px-4 sm:px-6 text-center text-white">
+              <h2 className="text-xs sm:text-sm md:text-xl font-light mb-1 tracking-wide drop-shadow-lg">
                 🚀 Welcome to <span className="font-bold">Trikon Academy</span>
               </h2>
-              <h1 className="text-lg md:text-3xl font-extrabold drop-shadow-xl leading-snug mb-2">
+              <h1 className="text-base sm:text-lg md:text-3xl font-extrabold drop-shadow-xl leading-snug mb-2">
                 {banners[active].quoteBn}
               </h1>
-              <p className="text-xs md:text-base text-white/90 font-light italic drop-shadow">
+              <p className="text-[10px] sm:text-xs md:text-base text-white/90 font-light italic drop-shadow">
                 {banners[active].quoteEn}
               </p>
             </div>
@@ -190,8 +187,8 @@ function Home() {
           {banners.map((_, i) => (
             <span
               key={i}
-              className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-300 ${
-                active === i ? "bg-white scale-110" : "bg-white/40"
+              className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 ${
+                active === i ? "bg-white scale-125" : "bg-white/40"
               }`}
             ></span>
           ))}
@@ -199,12 +196,12 @@ function Home() {
       </div>
 
       {/* 🎯 Notice Marquee */}
-      <div className="relative bg-gradient-to-r from-red-600 to-red-800 text-white py-2 overflow-hidden mt-6 rounded-md shadow-md">
+      <div className="relative bg-gradient-to-r from-pink-600 via-red-600 to-orange-600 text-white py-2 overflow-hidden mt-6 rounded-md shadow-md">
         <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused]">
           {[...notices, ...notices].map((notice, i) => (
             <span
               key={i}
-              className="font-semibold text-sm md:text-base mx-10 tracking-wide"
+              className="font-semibold text-xs sm:text-sm md:text-base mx-8 md:mx-10 tracking-wide"
             >
               {notice}
             </span>
@@ -213,8 +210,8 @@ function Home() {
       </div>
 
       {/* 📝 Live Quiz Section */}
-      <div className="w-[92%] md:w-[85%] mx-auto mt-6 p-5 rounded-2xl shadow-xl bg-gradient-to-br from-indigo-50 via-white/80 to-purple-50 backdrop-blur-md relative overflow-hidden border border-indigo-100">
-        <h2 className="text-lg md:text-xl font-bold mb-3 text-gray-800 flex items-center gap-2">
+      <div className="w-[94%] sm:w-[90%] md:w-[85%] mx-auto mt-6 p-4 sm:p-6 rounded-2xl shadow-xl bg-gradient-to-br from-indigo-50 via-white/80 to-purple-50 backdrop-blur-md relative overflow-hidden border border-indigo-100">
+        <h2 className="text-base sm:text-lg md:text-xl font-bold mb-3 text-gray-800 flex items-center gap-2">
           📝 Live Quiz
         </h2>
 
@@ -225,7 +222,7 @@ function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="text-gray-600 italic"
+              className="text-gray-600 italic text-sm sm:text-base"
             >
               ⏳ No active quiz available...
             </motion.p>
@@ -237,17 +234,17 @@ function Home() {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.5 }}
             >
-              <p className="mb-4 text-gray-700 font-medium">
+              <p className="mb-4 text-gray-700 font-medium text-sm sm:text-base">
                 প্রশ্নঃ {currentQuestion.text}
               </p>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {currentQuestion.options.map((opt, i) => {
                   const isCorrect = opt === currentQuestion.answer;
                   const isSelected = opt === selected;
 
                   let btnStyle =
-                    "p-3 text-sm md:text-base rounded-xl border transition-all shadow-md ";
+                    "p-3 text-xs sm:text-sm md:text-base rounded-xl border transition-all shadow-md ";
 
                   if (!selected) {
                     btnStyle +=
@@ -278,13 +275,13 @@ function Home() {
                 })}
               </div>
 
-              {/* ✅ Show solution after answer */}
+              {/* ✅ Solution */}
               {selected && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="mt-4 p-3 rounded-md bg-indigo-50 border border-indigo-200 text-sm text-indigo-800 shadow-inner"
+                  className="mt-4 p-3 rounded-md bg-indigo-50 border border-indigo-200 text-xs sm:text-sm text-indigo-800 shadow-inner"
                 >
                   💡 Solution: {currentQuestion.solution}
                 </motion.div>
@@ -295,36 +292,38 @@ function Home() {
       </div>
 
       {/* 🚀 Features Section */}
-      <div className="py-14 px-6 bg-gradient-to-r from-purple-50 via-pink-50 to-indigo-50">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">
+      <div className="py-10 sm:py-14 px-4 sm:px-6 bg-gradient-to-r from-purple-50 via-pink-50 to-indigo-50">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 sm:mb-10">
           ✨ Why Choose <span className="text-indigo-600">Trikon Academy</span>?
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {features.map((f, i) => (
             <motion.div
               key={i}
               whileHover={{ scale: 1.05 }}
-              className="rounded-2xl shadow-lg bg-white/80 backdrop-blur-md p-6 flex flex-col items-center text-center hover:shadow-2xl transition-all"
+              className="rounded-2xl shadow-lg bg-white/80 backdrop-blur-md p-5 sm:p-6 flex flex-col items-center text-center hover:shadow-2xl transition-all"
             >
               <div
-                className={`w-16 h-16 flex items-center justify-center rounded-full bg-gradient-to-r ${f.color} text-white text-3xl mb-4 shadow-md`}
+                className={`w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-full bg-gradient-to-r ${f.color} text-white text-2xl sm:text-3xl mb-4 shadow-md`}
               >
                 {f.icon}
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">{f.title}</h3>
-              <p className="text-gray-600 text-sm md:text-base">{f.desc}</p>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">
+                {f.title}
+              </h3>
+              <p className="text-gray-600 text-sm sm:text-base">{f.desc}</p>
             </motion.div>
           ))}
         </div>
       </div>
 
       {/* 🎓 Mission */}
-      <div className="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 py-14 px-6 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+      <div className="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 py-10 sm:py-14 px-4 sm:px-6 text-center">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
           Admission Success Starts Here 🎯
         </h2>
-        <p className="max-w-2xl mx-auto text-gray-600 text-base md:text-lg">
+        <p className="max-w-2xl mx-auto text-gray-600 text-sm sm:text-base md:text-lg">
           At <span className="font-semibold">Trikon Academy</span>, we prepare
           students smartly for Medical & University admission exams with proper
           guidance, daily practice & motivation 🚀
@@ -332,11 +331,11 @@ function Home() {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center py-6">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center py-6">
         <a
           href="/courses"
-          className="px-6 py-3 w-64 rounded-full bg-white/90 text-blue-700 font-semibold shadow-lg 
-          hover:bg-blue-600 hover:text-white transform hover:scale-105 transition-all duration-300 text-center"
+          className="px-5 py-3 w-56 sm:w-64 rounded-full bg-white/90 text-blue-700 font-semibold shadow-lg 
+          hover:bg-blue-600 hover:text-white transform hover:scale-105 transition-all duration-300 text-center text-sm sm:text-base"
         >
           🎓 Explore Our Courses
         </a>
@@ -344,15 +343,15 @@ function Home() {
           href="https://www.youtube.com/@trikonacademyedu"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-6 py-3 w-64 rounded-full bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold shadow-lg 
-          hover:from-red-600 hover:to-red-800 transform hover:scale-105 transition-all duration-300 text-center"
+          className="px-5 py-3 w-56 sm:w-64 rounded-full bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold shadow-lg 
+          hover:from-red-600 hover:to-red-800 transform hover:scale-105 transition-all duration-300 text-center text-sm sm:text-base"
         >
           ▶ Visit Our YouTube
         </a>
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white text-center text-sm py-4 mt-auto">
+      <footer className="bg-gray-900 text-white text-center text-xs sm:text-sm py-3 sm:py-4 mt-auto">
         © {new Date().getFullYear()} Trikon Academy. All Rights Reserved. Designed & Developed by Joy Sarkar
       </footer>
 
@@ -363,7 +362,7 @@ function Home() {
         }
         .animate-marquee {
           display: flex;
-          animation: marquee 12s linear infinite;
+          animation: marquee 15s linear infinite;
         }
       `}</style>
     </div>
