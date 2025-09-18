@@ -10,8 +10,8 @@ const banners = [
     image: background,
     quoteBn: "স্বপ্ন পূরণের সঠিক প্রস্তুতি এখান থেকেই শুরু ✨",
     quoteEn: "Your success begins here!",
-    duration: 7000, // 7s first time
-    repeatDuration: 10000, // 10s after loop
+    duration: 7000,
+    repeatDuration: 10000,
   },
   {
     id: 1,
@@ -151,7 +151,7 @@ function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* 🔥 Hero Banner */}
-      <div className="relative w-[90%] md:w-[85%] mx-auto h-[250px] md:h-[320px] mt-6 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="relative w-[92%] md:w-[85%] mx-auto h-[180px] md:h-[300px] mt-4 rounded-2xl overflow-hidden shadow-2xl">
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
@@ -172,10 +172,10 @@ function Home() {
 
             {/* Content */}
             <div className="relative z-10 h-full flex flex-col justify-center items-center px-6 text-center text-white">
-              <h2 className="text-lg md:text-xl font-light mb-2 tracking-wide drop-shadow-lg">
+              <h2 className="text-sm md:text-xl font-light mb-1 tracking-wide drop-shadow-lg">
                 🚀 Welcome to <span className="font-bold">Trikon Academy</span>
               </h2>
-              <h1 className="text-2xl md:text-4xl font-extrabold drop-shadow-xl leading-snug mb-3">
+              <h1 className="text-lg md:text-3xl font-extrabold drop-shadow-xl leading-snug mb-2">
                 {banners[active].quoteBn}
               </h1>
               <p className="text-xs md:text-base text-white/90 font-light italic drop-shadow">
@@ -186,11 +186,11 @@ function Home() {
         </AnimatePresence>
 
         {/* Dots */}
-        <div className="absolute bottom-4 flex gap-2 justify-center w-full z-20">
+        <div className="absolute bottom-2 flex gap-2 justify-center w-full z-20">
           {banners.map((_, i) => (
             <span
               key={i}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-300 ${
                 active === i ? "bg-white scale-110" : "bg-white/40"
               }`}
             ></span>
@@ -213,8 +213,8 @@ function Home() {
       </div>
 
       {/* 📝 Live Quiz Section */}
-      <div className="w-[90%] md:w-[85%] mx-auto mt-6 p-5 rounded-2xl shadow-lg bg-white relative overflow-hidden">
-        <h2 className="text-lg md:text-xl font-bold mb-3 text-gray-800">
+      <div className="w-[92%] md:w-[85%] mx-auto mt-6 p-5 rounded-2xl shadow-xl bg-gradient-to-br from-indigo-50 via-white/80 to-purple-50 backdrop-blur-md relative overflow-hidden border border-indigo-100">
+        <h2 className="text-lg md:text-xl font-bold mb-3 text-gray-800 flex items-center gap-2">
           📝 Live Quiz
         </h2>
 
@@ -225,7 +225,7 @@ function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="text-gray-600"
+              className="text-gray-600 italic"
             >
               ⏳ No active quiz available...
             </motion.p>
@@ -247,10 +247,11 @@ function Home() {
                   const isSelected = opt === selected;
 
                   let btnStyle =
-                    "p-3 text-sm md:text-base rounded-lg border transition-all ";
+                    "p-3 text-sm md:text-base rounded-xl border transition-all shadow-md ";
 
                   if (!selected) {
-                    btnStyle += "bg-gray-50 hover:bg-blue-100";
+                    btnStyle +=
+                      "bg-white/70 hover:bg-indigo-100 border-gray-200";
                   } else if (isSelected && isCorrect) {
                     btnStyle +=
                       "bg-green-200 border-green-500 text-green-800 font-semibold";
@@ -283,7 +284,7 @@ function Home() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="mt-4 p-3 rounded-md bg-blue-50 border border-blue-200 text-sm text-blue-800"
+                  className="mt-4 p-3 rounded-md bg-indigo-50 border border-indigo-200 text-sm text-indigo-800 shadow-inner"
                 >
                   💡 Solution: {currentQuestion.solution}
                 </motion.div>
