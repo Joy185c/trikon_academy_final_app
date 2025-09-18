@@ -18,14 +18,14 @@ const banners = [
     image: "https://picsum.photos/1200/400?random=1",
     quoteBn: "প্রতিদিন Practice Test দিয়ে নিজেকে আরও শক্তিশালী করুন 📚",
     quoteEn: "Daily practice makes you perfect.",
-    duration: 4000, // ⏳ 4s
+    duration: 4000, 
   },
   {
     id: 2,
     image: "https://picsum.photos/1200/400?random=2",
     quoteBn: "Trikon Academy – Admission Success Starts Here 🚀",
     quoteEn: "We guide you to your dream campus.",
-    duration: 4000, // ⏳ 4s
+    duration: 4000, 
   },
 ];
 
@@ -42,24 +42,25 @@ const notices = [
   "🚀 Trikon Academy – Admission Success Starts Here!",
 ];
 
+// 🚀 Features with glossy gradient background
 const features = [
   {
     title: "Unlimited Question Bank",
     desc: "অসংখ্য MCQ + Practice Session – যতবার খুশি চেষ্টা করুন। 🚀 ভর্তি যুদ্ধে জন্য প্রস্তুত হোন।",
     icon: "📚",
-    color: "from-green-400 to-green-600",
+    bg: "bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600",
   },
   {
     title: "Dedicated Exam Batches",
     desc: "Expert Faculty + Mock Test 🔥 Real Exam Experience & Detailed Analysis।",
     icon: "🎯",
-    color: "from-red-400 to-red-600",
+    bg: "bg-gradient-to-br from-pink-400 via-red-500 to-orange-500",
   },
   {
     title: "Success Stories",
     desc: "গত বছর 80% শিক্ষার্থী তাদের স্বপ্নের ক্যাম্পাসে ভর্তি হয়েছে! 👏",
     icon: "🏆",
-    color: "from-purple-400 to-purple-600",
+    bg: "bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600",
   },
 ];
 
@@ -101,10 +102,9 @@ function Home() {
     }
   };
 
-  // ✅ Auto next (3s if answered, 5s if not)
+  // ✅ Auto next
   useEffect(() => {
     if (questions.length === 0) return;
-
     let timer;
     if (selected) {
       timer = setTimeout(() => {
@@ -167,7 +167,6 @@ function Home() {
             ></div>
             <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] shadow-inner"></div>
 
-            {/* Content */}
             <div className="relative z-10 h-full flex flex-col justify-center items-center px-4 sm:px-6 text-center text-white">
               <h2 className="text-xs sm:text-sm md:text-xl font-light mb-1 tracking-wide drop-shadow-lg">
                 🚀 Welcome to <span className="font-bold">Trikon Academy</span>
@@ -210,8 +209,14 @@ function Home() {
       </div>
 
       {/* 📝 Live Quiz Section */}
-      <div className="w-[94%] sm:w-[90%] md:w-[85%] mx-auto mt-6 p-4 sm:p-6 rounded-2xl shadow-xl bg-gradient-to-br from-indigo-50 via-white/80 to-purple-50 backdrop-blur-md relative overflow-hidden border border-indigo-100">
-        <h2 className="text-base sm:text-lg md:text-xl font-bold mb-3 text-gray-800 flex items-center gap-2">
+      <div className="w-[94%] sm:w-[90%] md:w-[85%] mx-auto mt-6 p-4 sm:p-6 
+        rounded-2xl shadow-2xl 
+        bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100 
+        backdrop-blur-lg 
+        relative overflow-hidden 
+        border border-indigo-200">
+        
+        <h2 className="text-base sm:text-lg md:text-xl font-bold mb-3 text-indigo-900 flex items-center gap-2">
           📝 Live Quiz
         </h2>
 
@@ -248,7 +253,7 @@ function Home() {
 
                   if (!selected) {
                     btnStyle +=
-                      "bg-white/70 hover:bg-indigo-100 border-gray-200";
+                      "bg-white/70 hover:bg-gradient-to-r hover:from-indigo-100 hover:to-blue-100 border-gray-200";
                   } else if (isSelected && isCorrect) {
                     btnStyle +=
                       "bg-green-200 border-green-500 text-green-800 font-semibold";
@@ -302,17 +307,22 @@ function Home() {
             <motion.div
               key={i}
               whileHover={{ scale: 1.05 }}
-              className="rounded-2xl shadow-lg bg-white/80 backdrop-blur-md p-5 sm:p-6 flex flex-col items-center text-center hover:shadow-2xl transition-all"
+              className={`${f.bg} rounded-2xl shadow-2xl p-5 sm:p-6 flex flex-col items-center text-center text-white transition-all relative overflow-hidden`}
             >
-              <div
-                className={`w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-full bg-gradient-to-r ${f.color} text-white text-2xl sm:text-3xl mb-4 shadow-md`}
-              >
-                {f.icon}
+              {/* Glossy Effect */}
+              <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] rounded-2xl pointer-events-none"></div>
+
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-full bg-white/30 text-2xl sm:text-3xl mb-4 shadow-md">
+                  {f.icon}
+                </div>
+                <h3 className="text-lg sm:text-xl font-bold mb-2 drop-shadow-lg">
+                  {f.title}
+                </h3>
+                <p className="text-sm sm:text-base text-white/90 font-light leading-relaxed">
+                  {f.desc}
+                </p>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">
-                {f.title}
-              </h3>
-              <p className="text-gray-600 text-sm sm:text-base">{f.desc}</p>
             </motion.div>
           ))}
         </div>
