@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { supabase } from "../lib/supabaseclient.js";
+import { useAuth } from "../context/AuthContext.jsx"; // ✅ আমরা context use করব
 
 export default function SignUp() {
+  const { register } = useAuth(); // AuthContext থেকে register আসবে
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,55 +14,12 @@ export default function SignUp() {
     setError("");
     setLoading(true);
 
-    console.log("🔹 Signup form submitted:", { name, email, password });
-
     try {
-      // Step 1: Supabase Auth signup with metadata
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: name, // ✅ save name in metadata
-          },
-        },
-      });
-
-      console.log("🔹 Supabase signUp response:", data, signUpError);
-
-      if (signUpError) {
-        setError(`Auth error: ${signUpError.message}`);
-        setLoading(false);
-        return;
-      }
-
-      if (!data?.user) {
-        setError("Signup failed: No user returned.");
-        setLoading(false);
-        return;
-      }
-
-      // Step 2: Insert into custom table (optional)
-      const { error: dbError } = await supabase.from("students").insert([
-        {
-          auth_id: data.user.id,
-          name: name,
-          email: email,
-        },
-      ]);
-
-      console.log("🔹 DB Insert response:", dbError);
-
-      if (dbError) {
-        setError(`Database insert error: ${dbError.message}`);
-        setLoading(false);
-        return;
-      }
-
-      alert("✅ Signup successful! Please check your email for confirmation.");
+      await register(name, email, password); // ✅ AuthContext এর register ব্যবহার
+      alert("✅ Signup successful! Please check your email.");
     } catch (err) {
-      console.error("Unexpected error:", err);
-      setError("Unexpected error occurred. Check console for details.");
+      console.error("Signup Error:", err);
+      setError(err.message);
     }
 
     setLoading(false);

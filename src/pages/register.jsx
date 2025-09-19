@@ -1,32 +1,32 @@
+// src/pages/Register.jsx
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabaseclient.js";
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext"; // ✅ context থেকে register আনবো
 
 function Register() {
   const navigate = useNavigate();
+  const { register } = useAuth(); // ✅ AuthContext এর register()
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setLoading(true);
+
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    // Supabase signup
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: name }, // Extra metadata
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-    } else {
-      console.log("✅ User registered:", data.user);
+    try {
+      const user = await register(name, email, password); // ✅ context এর ফাংশন
+      console.log("✅ User registered:", user);
       navigate("/dashboard");
+    } catch (err) {
+      setError(err.message);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -67,9 +67,10 @@ function Register() {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-green-600 text-white py-3 rounded-xl shadow hover:opacity-90 transition"
           >
-            Register
+            {loading ? "⏳ Registering..." : "Register"}
           </button>
         </form>
 

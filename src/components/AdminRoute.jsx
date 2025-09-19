@@ -10,32 +10,50 @@ function AdminRoute({ children }) {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (data?.user) {
-        setUser(data.user);
+      setLoading(true);
 
-        // ✅ profiles থেকে role + secret_code চেক
-        let { data: profile, error } = await supabase
-          .from("profiles")
-          .select("role, secret_code")
-          .eq("id", data.user.id)
-          .single();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
+      if (userError || !user) {
+        setLoading(false);
+        return;
+      }
+
+      setUser(user);
+
+      // ✅ profiles থেকে role + secret_code চেক
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role, secret_code")
+        .eq("id", user.id)
+        .single();
+
+      if (!profileError && profile) {
         if (
-          !error &&
-          profile?.role === "admin" &&
-          profile?.secret_code === "540274tiptip"
+          profile.role === "admin" &&
+          profile.secret_code === "540274tiptip"
         ) {
           setIsAdmin(true);
         }
       }
+
       setLoading(false);
     };
+
     checkUser();
   }, []);
 
   if (loading) {
-    return <p className="text-center mt-10">Checking admin access...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg font-semibold text-gray-600">
+          Checking admin access...
+        </p>
+      </div>
+    );
   }
 
   if (!user || !isAdmin) {

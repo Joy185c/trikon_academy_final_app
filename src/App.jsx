@@ -1,8 +1,9 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { supabase } from "./lib/supabaseclient.js";
+import { useAuth } from "./context/AuthContext.jsx"; // ✅ AuthContext import
 
-import Navbar from "./components/navbar.jsx";  // ✅ Navbar থাকবে
+import Navbar from "./components/navbar.jsx";
 import Home from "./pages/home.jsx";
 import Login from "./pages/login.jsx";
 import Signup from "./pages/SignUp.jsx";
@@ -46,15 +47,12 @@ import AdminBkashSettings from "./pages/admin/AdminBkashSettings.jsx";
 import AdminPayments from "./pages/admin/AdminPayments.jsx";
 
 const App = () => {
-  const navigate = useNavigate();
+  const { user, logout } = useAuth(); // ✅ context থেকে user, logout নিলাম
 
   useEffect(() => {
-    const checkStatus = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
+    if (!user) return;
 
+    const checkStatus = async () => {
       const { data: student } = await supabase
         .from("student_users")
         .select("status")
@@ -62,13 +60,11 @@ const App = () => {
         .single();
 
       if (student?.status === "paused") {
-        await supabase.auth.signOut();
-        navigate("/login");
+        await logout();
         alert("⚠️ Your account is paused by admin.");
       }
     };
 
-    // 🔹 Run once on app load
     checkStatus();
 
     // 🔹 Realtime subscription
@@ -82,17 +78,11 @@ const App = () => {
           table: "student_users",
         },
         async (payload) => {
-          const {
-            data: { user },
-          } = await supabase.auth.getUser();
-          if (!user) return;
-
           if (
             payload.new.email === user.email &&
             payload.new.status === "paused"
           ) {
-            await supabase.auth.signOut();
-            navigate("/login");
+            await logout();
             alert("⚠️ Your account was paused by admin.");
           }
         }
@@ -102,11 +92,11 @@ const App = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [navigate]);
+  }, [user, logout]);
 
   return (
     <>
-      <Navbar /> {/* ✅ Navbar থাকবে */}
+      <Navbar />
       <Routes>
         {/* 🌍 Public Routes */}
         <Route path="/" element={<Home />} />

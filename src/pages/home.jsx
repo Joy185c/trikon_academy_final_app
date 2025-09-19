@@ -377,6 +377,9 @@ function Home() {
       `}</style>
     </div>
   );
+
+  
+
 }
 
 export default Home;

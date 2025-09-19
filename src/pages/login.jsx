@@ -1,10 +1,11 @@
 // src/pages/Login.jsx
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { supabase } from "../lib/supabaseclient";
+import { useAuth } from "../context/AuthContext"; // ✅ context থেকে login আনবো
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth(); // ✅ এখন context থেকে login ব্যবহার করছি
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -16,16 +17,12 @@ function Login() {
     setError(null);
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError(error.message);
-    } else {
-      console.log("✅ Login successful:", data);
-      navigate("/dashboard"); // redirect after login
+    try {
+      const user = await login(email, password); // ✅ AuthContext থেকে কল
+      console.log("✅ Login successful:", user);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message);
     }
 
     setLoading(false);
@@ -42,7 +39,7 @@ function Login() {
     setLoading(true);
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:5173/update-password", // তোমার reset page
+      redirectTo: "http://localhost:5173/update-password",
     });
 
     if (error) {
